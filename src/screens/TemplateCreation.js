@@ -1,41 +1,61 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {
-  Container,
-  Header,
-  Content,
-  Textarea,
-  Form,
-  Item,
-  Input,
-  Button,
-  Label,
-  Fab,
-} from 'native-base';
+import {Text, View} from 'react-native';
+import {Textarea, Form, Button} from 'native-base';
+import SaveFile from '../services/SaveFile';
 
 class TemplateCreation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: false,
+      value: '',
     };
   }
+  handleTemplateChange = value => {
+    this.setState({value: value});
+  };
+  handleTemplateDataAdd = (newValue, meta = false) => {
+    this.setState(prevState => ({
+      value:
+        prevState.value + (meta ? '|^~' : '') + newValue + (meta ? '~^| ' : ''),
+    }));
+  };
+  handleSave = () => {
+    SaveFile({value: this.state.value});
+  };
   render() {
     return (
       <View>
         <Form>
-          <Textarea rowSpan={5} bordered placeholder="Текс Розписки" />
+          <Textarea
+            value={this.state.value}
+            onChangeText={this.handleTemplateChange}
+            rowSpan={5}
+            bordered
+            placeholder="Текс Розписки"
+          />
         </Form>
-        <Button light>
+        <Button
+          light
+          onPress={() => {
+            this.handleTemplateDataAdd('MyName', true);
+          }}>
           <Text>Мій ПІБ</Text>
         </Button>
-        <Button light>
+        <Button
+          light
+          onPress={() => {
+            this.handleTemplateDataAdd('Name', true);
+          }}>
           <Text>ПІБ контрагента</Text>
         </Button>
-        <Button light>
+        <Button
+          light
+          onPress={() => {
+            this.handleTemplateDataAdd('Date', true);
+          }}>
           <Text>Дата</Text>
         </Button>
-        <Button light>
+        <Button light onPress={this.handleSave}>
           <Text>Зберегти</Text>
         </Button>
       </View>
