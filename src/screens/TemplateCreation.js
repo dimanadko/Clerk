@@ -19,8 +19,9 @@ class TemplateCreation extends React.Component {
         prevState.value + (meta ? '|^~' : '') + newValue + (meta ? '~^| ' : ''),
     }));
   };
-  handleSave = () => {
-    SaveFile({value: this.state.value});
+  handleSave = async () => {
+    await SaveFile({value: this.state.value});
+    this.props.navigation.goBack();
   };
   render() {
     return (
