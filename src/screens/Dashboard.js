@@ -1,22 +1,94 @@
-import React from 'react';
-import {Button, Text, View} from 'react-native';
+import React, {Component} from 'react';
+import {Text, View, FlatList, StyleSheet} from 'react-native';
+import {List, ListItem, Icon, Button} from 'native-base';
+import GetTemplates from '../services/GetTemplates';
 
-const Dashboard = ({navigation}): Node => (
-  <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-    <Text>Home Screen</Text>
-    <Button
-      title="Go to StartUp"
-      onPress={() => navigation.navigate('StartUp')}
-    />
-    <Button
-      title="Go to SubmitPage"
-      onPress={() => navigation.navigate('SubmitPage')}
-    />
-    <Button
-      title="Go to Template Creation"
-      onPress={() => navigation.navigate('TemplateCreation')}
-    />
-  </View>
-);
+const TemplateListItem = ({title, onSubscribe, onDelete}) => {
+  return (
+    <View style={styles.item}>
+      <Text>{title}</Text>
+      <Button light onPress={onSubscribe}>
+        <Text>Надіслати</Text>
+      </Button>
+      <Button light onPress={onDelete}>
+        <Text>Видалити</Text>
+      </Button>
+    </View>
+  );
+};
 
-export default Dashboard;
+export default class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      templates: [],
+    };
+  }
+  componentDidMount() {
+    GetTemplates().then(
+      res => {
+        this.setState({templates: res});
+      },
+      rej => console.log(rej),
+    );
+  }
+
+  render() {
+    const renderItem = ({item}) => (
+      <TemplateListItem
+        title={item.name}
+        onSubscribe={console.log}
+        onDelete={console.log}
+      />
+    );
+    const {navigation} = this.props;
+    return (
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <Text>Home Screen</Text>
+        <FlatList
+          style={styles.listContainer}
+          data={this.state.templates}
+          renderItem={renderItem}
+          keyExtractor={item => item.name}
+        />
+        <Button
+          title="Go to StartUp"
+          onPress={() => navigation.navigate('StartUp')}>
+          <Text>Go to StartUp</Text>
+        </Button>
+        <Button
+          title="Go to SubmitPage"
+          onPress={() => navigation.navigate('SubmitPage')}>
+          <Text>Go to SubmitPage</Text>
+        </Button>
+        <Button onPress={() => navigation.navigate('TemplateCreation')}>
+          <Text>TemplateCreation</Text>
+        </Button>
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  listContainer: {
+    height: 200,
+    flex: 1,
+    backgroundColor: '#ff0000',
+  },
+  container: {
+    flex: 1,
+    marginTop: 10,
+  },
+  item: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
+  },
+});

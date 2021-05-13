@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -35,6 +35,7 @@ import Dashboard from './src/screens/Dashboard';
 import SubmitPage from './src/screens/SubmitPage';
 import * as RNFS from 'react-native-fs';
 import SaveFile from './src/services/SaveFile';
+import GetTemplates from './src/services/GetTemplates';
 //readDir(dirpath: string)
 
 const Stack = createStackNavigator();
@@ -44,29 +45,28 @@ const path = RNFS.DocumentDirectoryPath + '/test1.txt';
 const App: () => Node = () => {
   useEffect(() => {
     SaveFile({name: 'test', value: 'This is test value'});
-
-    RNFS.readDir(RNFS.DocumentDirectoryPath)
-      .then(result => {
-        console.log('GOT RESULT', result);
-
-        // stat the first file
-        return Promise.all([RNFS.stat(result[0].path), result[0].path]);
-      })
-      .then(statResult => {
-        if (statResult[0].isFile()) {
-          // if we have a file, read it
-          return RNFS.readFile(statResult[1], 'utf8');
-        }
-
-        return 'no file';
-      })
-      .then(contents => {
-        // log the file contents
-        console.log(contents);
-      })
-      .catch(err => {
-        console.log(err.message, err.code);
-      });
+    // RNFS.readDir(RNFS.DocumentDirectoryPath)
+    //   .then(result => {
+    //     console.log('GOT RESULT', result);
+    //
+    //     // stat the first file
+    //     return Promise.all([RNFS.stat(result[0].path), result[0].path]);
+    //   })
+    //   .then(statResult => {
+    //     if (statResult[0].isFile()) {
+    //       // if we have a file, read it
+    //       return RNFS.readFile(statResult[1], 'utf8');
+    //     }
+    //
+    //     return 'no file';
+    //   })
+    //   .then(contents => {
+    //     // log the file contents
+    //     console.log(contents);
+    //   })
+    //   .catch(err => {
+    //     console.log(err.message, err.code);
+    //   });
   }, []);
   const isDarkMode = useColorScheme() === 'dark';
 
