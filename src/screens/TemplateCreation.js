@@ -20,6 +20,7 @@ class TemplateCreation extends React.Component {
     }));
   };
   handleSave = async () => {
+    console.log('State', this.state);
     await SaveFile({value: this.state.value});
     this.props.navigation.goBack();
   };

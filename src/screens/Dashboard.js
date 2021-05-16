@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 import {Text, View, FlatList, StyleSheet} from 'react-native';
 import {List, ListItem, Icon, Button} from 'native-base';
 import GetTemplates from '../services/GetTemplates';
+import {connect} from 'react-redux';
 
-const TemplateListItem = ({title, onSubscribe, onDelete}) => {
+const TemplateListItem = ({title, onSubscribe, onDelete, path}) => {
   return (
     <View style={styles.item}>
       <Text>{title}</Text>
-      <Button light onPress={onSubscribe}>
+      <Button light onPress={() => onSubscribe(path)}>
         <Text>Надіслати</Text>
       </Button>
       <Button light onPress={onDelete}>
@@ -17,7 +18,7 @@ const TemplateListItem = ({title, onSubscribe, onDelete}) => {
   );
 };
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,11 +34,16 @@ export default class Dashboard extends Component {
     );
   }
 
+  handleTemplateSubscribe = path => {
+    this.props.navigation.navigate('SubmitPage', {templatePath: path});
+  };
+
   render() {
     const renderItem = ({item}) => (
       <TemplateListItem
         title={item.name}
-        onSubscribe={console.log}
+        path={item.path}
+        onSubscribe={this.handleTemplateSubscribe}
         onDelete={console.log}
       />
     );
@@ -64,6 +70,7 @@ export default class Dashboard extends Component {
         <Button onPress={() => navigation.navigate('TemplateCreation')}>
           <Text>TemplateCreation</Text>
         </Button>
+        <Text>{JSON.stringify(this.props.store)}</Text>
       </View>
     );
   }
@@ -92,3 +99,9 @@ const styles = StyleSheet.create({
     fontSize: 32,
   },
 });
+
+const mapStateToProps = store => ({
+  store,
+});
+
+export default connect(mapStateToProps)(Dashboard);

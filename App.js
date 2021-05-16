@@ -7,7 +7,10 @@
  */
 
 import React, {useEffect, useState} from 'react';
+import {Provider, connect} from 'react-redux';
+import {PersistGate} from 'redux-persist/lib/integration/react';
 import type {Node} from 'react';
+// import configureStore from './src/store/store';
 import {
   SafeAreaView,
   ScrollView,
@@ -18,6 +21,11 @@ import {
   View,
   Button,
 } from 'react-native';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import {combineReducers, createStore} from 'redux';
+import {persistStore, persistReducer} from 'redux-persist';
 
 import {
   Colors,
@@ -38,13 +46,57 @@ import SaveFile from './src/services/SaveFile';
 import GetTemplates from './src/services/GetTemplates';
 //readDir(dirpath: string)
 
+// const {store, persistor} = configureStore();
+
 const Stack = createStackNavigator();
 
 const path = RNFS.DocumentDirectoryPath + '/test1.txt';
 
+const defaultState = {
+  name: undefined,
+  surname: undefined,
+  patronymic: undefined,
+  privateKey: undefined,
+  publicKey: undefined,
+};
+
+const rootReducer = combineReducers({
+  data: (state = defaultState, action = {}) => {
+    switch (action.type) {
+      case 'UPDATE_DATA':
+        return {
+          ...state,
+          [action.field]: action.value,
+        };
+      case 'UPDATE_ALL_DATA':
+        return {
+          ...state,
+          ...action.value,
+        };
+      default:
+        return state;
+    }
+  },
+});
+
+// persist config
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+  debug: true,
+  stateReconciler: autoMergeLevel2,
+};
+// wrap persist API around root reducer and store
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = createStore(persistedReducer);
+export const persistor = persistStore(store);
+
 const App: () => Node = () => {
   useEffect(() => {
-    SaveFile({name: 'test', value: 'This is test value'});
+    SaveFile({name: 'test', value: 'This is test value1'});
+    SaveFile({name: 'test2', value: 'This is test value2'});
+
     // RNFS.readDir(RNFS.DocumentDirectoryPath)
     //   .then(result => {
     //     console.log('GOT RESULT', result);
@@ -75,14 +127,21 @@ const App: () => Node = () => {
   };
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Dashboard} />
-        <Stack.Screen name="SubmitPage" component={SubmitPage} />
-        <Stack.Screen name="StartUp" component={StartUp} />
-        <Stack.Screen name="TemplateCreation" component={TemplateCreation} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Home">
+            <Stack.Screen name="Home" component={Dashboard} />
+            <Stack.Screen name="SubmitPage" component={SubmitPage} />
+            <Stack.Screen name="StartUp" component={StartUp} />
+            <Stack.Screen
+              name="TemplateCreation"
+              component={TemplateCreation}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   );
 };
 

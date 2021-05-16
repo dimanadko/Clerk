@@ -1,9 +1,10 @@
 import * as RNFS from 'react-native-fs';
+import moment from 'moment';
 
 const metaPath = RNFS.DocumentDirectoryPath + '/templates';
 
 const SaveFile = async ({
-  name = 'template' + new Date().toISOString(),
+  name = 'template' + moment().format('MMMM Do YYYY h-mm-ss a'),
   value,
 }) => {
   const path = metaPath + '/' + name + '.txt';
