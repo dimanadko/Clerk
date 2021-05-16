@@ -10,22 +10,7 @@ import React, {useEffect, useState} from 'react';
 import {Provider, connect} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import type {Node} from 'react';
-// import configureStore from './src/store/store';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  Button,
-} from 'react-native';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import {combineReducers, createStore} from 'redux';
-import {persistStore, persistReducer} from 'redux-persist';
+import {StyleSheet, useColorScheme} from 'react-native';
 
 import {
   Colors,
@@ -44,53 +29,15 @@ import SubmitPage from './src/screens/SubmitPage';
 import * as RNFS from 'react-native-fs';
 import SaveFile from './src/services/SaveFile';
 import GetTemplates from './src/services/GetTemplates';
+import {rootReducer} from './src/reducers';
+import {persistor, store} from './src/store/store';
 //readDir(dirpath: string)
-
-// const {store, persistor} = configureStore();
 
 const Stack = createStackNavigator();
 
 const path = RNFS.DocumentDirectoryPath + '/test1.txt';
 
-const defaultState = {
-  name: undefined,
-  surname: undefined,
-  patronymic: undefined,
-  privateKey: undefined,
-  publicKey: undefined,
-};
-
-const rootReducer = combineReducers({
-  data: (state = defaultState, action = {}) => {
-    switch (action.type) {
-      case 'UPDATE_DATA':
-        return {
-          ...state,
-          [action.field]: action.value,
-        };
-      case 'UPDATE_ALL_DATA':
-        return {
-          ...state,
-          ...action.value,
-        };
-      default:
-        return state;
-    }
-  },
-});
-
 // persist config
-const persistConfig = {
-  key: 'root',
-  storage: AsyncStorage,
-  debug: true,
-  stateReconciler: autoMergeLevel2,
-};
-// wrap persist API around root reducer and store
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-export const store = createStore(persistedReducer);
-export const persistor = persistStore(store);
 
 const App: () => Node = () => {
   useEffect(() => {

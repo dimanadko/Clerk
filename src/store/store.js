@@ -1,40 +1,16 @@
 import {createStore, combineReducers} from 'redux';
 import {persistStore, persistReducer} from 'redux-persist';
-import rootReducer from '../reducers/index';
+import {rootReducer} from '../reducers/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
 
-function configureStore(initialState = {}) {
-  const reducer = combineReducers({
-    form: persistReducer(
-      {
-        key: 'form', // key for localStorage key, will be: "persist:form"
-        storage: AsyncStorage,
-        debug: true,
-      },
-      rootReducer,
-    ),
-  });
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+  debug: true,
+  stateReconciler: autoMergeLevel2,
+};
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-  const store = createStore(
-    persistReducer(
-      {
-        key: 'root',
-        debug: true,
-        storage: AsyncStorage,
-      },
-      reducer,
-    ),
-    initialState,
-  );
-
-  console.log('initialState', store.getState());
-
-  const persistor = persistStore(store, null, () => {
-    // if you want to get restoredState
-    console.log('restoredState', store.getState());
-  });
-
-  return {store, persistor};
-}
-
-export default configureStore;
+export const store = createStore(persistedReducer);
+export const persistor = persistStore(store);

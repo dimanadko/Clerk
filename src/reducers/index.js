@@ -1,3 +1,5 @@
+import {combineReducers} from 'redux';
+
 const defaultState = {
   name: undefined,
   surname: undefined,
@@ -6,14 +8,21 @@ const defaultState = {
   publicKey: undefined,
 };
 
-export default function (state = defaultState, action = {}) {
-  switch (action.type) {
-    case 'UPDATE':
-      return {
-        ...state,
-        [action.field]: action.value,
-      };
-    default:
-      return state;
-  }
-}
+export const rootReducer = combineReducers({
+  data: (state = defaultState, action = {}) => {
+    switch (action.type) {
+      case 'UPDATE_DATA':
+        return {
+          ...state,
+          [action.field]: action.value,
+        };
+      case 'UPDATE_ALL_DATA':
+        return {
+          ...state,
+          ...action.value,
+        };
+      default:
+        return state;
+    }
+  },
+});
