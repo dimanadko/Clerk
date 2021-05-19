@@ -5029,6 +5029,11 @@ node-fetch@2.6.1, node-fetch@^2.2.0, node-fetch@^2.6.0:
   resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.1.tgz"
   integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
 
+node-forge@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.10.0.tgz#32dea2afb3e9926f02ee5ce8794902691a676bf3"
+  integrity sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA==
+
 node-int64@^0.4.0:
   version "0.4.0"
   resolved "https://registry.npmjs.org/node-int64/-/node-int64-0.4.0.tgz"
@@ -5642,6 +5647,11 @@ react-native-reanimated@^2.1.0:
     fbjs "^3.0.0"
     mockdate "^3.0.2"
     string-hash-64 "^1.0.3"
+
+react-native-rsa-native@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-rsa-native/-/react-native-rsa-native-2.0.3.tgz#a028fe5ddedcd50e792c0bd0f04c48f97a084d64"
+  integrity sha512-3M9U+cBMIYdvYAHImnIn1ODC948gi7A0lT9CNK3AUllD6qzRV9x+9RgPqPtAJfuC3fw6KyhP30zXaIKfAZGBHA==
 
 react-native-safe-area-context@^3.2.0:
   version "3.2.0"

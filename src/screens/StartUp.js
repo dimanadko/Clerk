@@ -12,6 +12,9 @@ import {
   Button,
 } from 'native-base';
 import {connect} from 'react-redux';
+const forge = require('node-forge');
+import {RSA} from 'react-native-rsa-native';
+console.log('RSA', RSA);
 
 class StartUp extends React.Component {
   constructor(props) {
@@ -27,6 +30,18 @@ class StartUp extends React.Component {
 
   handleFieldChange = field => e => {
     this.setState({[field]: e});
+  };
+
+  handleCreateKeyPair = async () => {
+    console.log('handleCreateKeyPair');
+    console.log(RSA);
+    const keys = await RSA.generateKeys(4096);
+    const result = {
+      privateKey: forge.pki.privateKeyFromPem(keys.private),
+      publicKey: forge.pki.publicKeyFromPem(keys.public),
+    };
+    console.log('result', result);
+    return result;
   };
 
   render() {
@@ -69,6 +84,9 @@ class StartUp extends React.Component {
             onChangeText={this.handleFieldChange('publicKey')}
           />
         </Form>
+        <Button onPress={() => this.handleCreateKeyPair()} light>
+          <Text>Додати ключі</Text>
+        </Button>
         <Button onPress={() => this.props.onSave(this.state)} light>
           <Text>Зберегти</Text>
         </Button>
