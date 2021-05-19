@@ -3,6 +3,8 @@ import {Text, View, FlatList, StyleSheet} from 'react-native';
 import {List, ListItem, Icon, Button} from 'native-base';
 import GetTemplates from '../services/GetTemplates';
 import {connect} from 'react-redux';
+import RNShare from 'react-native-share';
+import RNFetchBlob from 'rn-fetch-blob'
 
 const TemplateListItem = ({title, onSubscribe, onDelete, path}) => {
   return (
@@ -16,6 +18,12 @@ const TemplateListItem = ({title, onSubscribe, onDelete, path}) => {
       </Button>
     </View>
   );
+};
+
+const fileShareOption = {
+  type: 'application/octet-stream',
+  url:
+    'content://com.android.providers.downloads.documents/document/raw%3A%2Fstorage%2Femulated%2F0%2FDownload%2FhelloWorld.txt.p7s',
 };
 
 class Dashboard extends Component {
@@ -36,6 +44,21 @@ class Dashboard extends Component {
 
   handleTemplateSubscribe = path => {
     this.props.navigation.navigate('SubmitPage', {templatePath: path});
+  };
+
+  handleSendFile = () => {
+    // const {fs, fetch, wrap} = RNFetchBlob;
+    // RNFetchBlob.fs.readFile(fileShareOption.url, 'base64').then(base64Data => {
+    //   base64Data = `{fileShareOption.type};base64,` + base64Data;
+    //   RNShare.open({url: base64Data});
+    // });
+    RNShare.open(fileShareOption)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        err && console.log(err);
+      });
   };
 
   render() {
@@ -69,6 +92,9 @@ class Dashboard extends Component {
         </Button>
         <Button onPress={() => navigation.navigate('TemplateCreation')}>
           <Text>TemplateCreation</Text>
+        </Button>
+        <Button onPress={this.handleSendFile}>
+          <Text>Test</Text>
         </Button>
         <Text>{JSON.stringify(this.props.store)}</Text>
       </View>
