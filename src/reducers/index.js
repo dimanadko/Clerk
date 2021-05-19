@@ -6,6 +6,8 @@ const defaultState = {
   patronymic: undefined,
   privateKey: undefined,
   publicKey: undefined,
+  keyAddress: undefined,
+  keyName: undefined,
 };
 
 export const rootReducer = combineReducers({

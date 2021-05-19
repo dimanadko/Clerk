@@ -12,6 +12,8 @@ import {
   Button,
 } from 'native-base';
 import {connect} from 'react-redux';
+import DocumentPicker from 'react-native-document-picker';
+
 const forge = require('node-forge');
 import {RSA} from 'react-native-rsa-native';
 console.log('RSA', RSA);
@@ -30,6 +32,27 @@ class StartUp extends React.Component {
 
   handleFieldChange = field => e => {
     this.setState({[field]: e});
+  };
+
+  handleAddKey = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        // type: [DocumentPicker.types.images],
+      });
+      console.log(
+        res.uri,
+        res.type, // mime type
+        res.name,
+        res.size,
+      );
+      this.props.onAddKey({keyAddress: res.uri, keyName: res.name});
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+        throw err;
+      }
+    }
   };
 
   handleCreateKeyPair = async () => {
@@ -69,6 +92,8 @@ class StartUp extends React.Component {
               onChangeText={this.handleFieldChange('patronymic')}
             />
           </Item>
+          <Text>Сертифікат</Text>
+          <Text>{this.props.keyName || 'Необхідно додати'}</Text>
           <Textarea
             rowSpan={5}
             bordered
@@ -84,7 +109,7 @@ class StartUp extends React.Component {
             onChangeText={this.handleFieldChange('publicKey')}
           />
         </Form>
-        <Button onPress={() => this.handleCreateKeyPair()} light>
+        <Button onPress={() => this.handleAddKey()} light>
           <Text>Додати ключі</Text>
         </Button>
         <Button onPress={() => this.props.onSave(this.state)} light>
@@ -103,6 +128,8 @@ const mapStateToProps = ({data}) => ({
   patronymic: data.patronymic,
   privateKey: data.privateKey,
   publicKey: data.publicKey,
+  keyName: data.keyName,
+  keyAddress: data.keyAddress,
 });
 const mapDispatchToProps = dispatch => {
   return {
@@ -116,6 +143,15 @@ const mapDispatchToProps = dispatch => {
           patronymic,
           privateKey,
           publicKey,
+        },
+      });
+    },
+    onAddKey: ({keyName, keyAddress}) => {
+      dispatch({
+        type: 'UPDATE_ALL_DATA',
+        value: {
+          keyName: keyName,
+          keyAddress: keyAddress,
         },
       });
     },
