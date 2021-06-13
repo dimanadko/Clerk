@@ -16,6 +16,7 @@ import {
 import RNShare from 'react-native-share';
 import moment from 'moment';
 import {connect} from 'react-redux';
+import SaveFile from '../services/SaveFile';
 
 const fileShareOption = {
   type: 'application/octet-stream',
@@ -54,6 +55,7 @@ class SubmitPage extends React.Component {
     //   base64Data = `{fileShareOption.type};base64,` + base64Data;
     //   RNShare.open({url: base64Data});
     // });
+    SaveFile({value: this.state.templateText, type: 'document'});
     RNShare.open(fileShareOption)
       .then(res => {
         console.log(res);

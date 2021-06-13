@@ -4,7 +4,8 @@ import {List, ListItem, Icon, Button} from 'native-base';
 import GetTemplates from '../services/GetTemplates';
 import {connect} from 'react-redux';
 import RNShare from 'react-native-share';
-import RNFetchBlob from 'rn-fetch-blob'
+// import RNFetchBlob from 'rn-fetch-blob';
+import GetDocuments from '../services/GetDocuments';
 
 const TemplateListItem = ({title, onSubscribe, onDelete, path}) => {
   return (
@@ -31,12 +32,19 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       templates: [],
+      documents: [],
     };
   }
   componentDidMount() {
     GetTemplates().then(
       res => {
         this.setState({templates: res});
+      },
+      rej => console.log(rej),
+    );
+    GetDocuments().then(
+      res => {
+        this.setState({documents: res});
       },
       rej => console.log(rej),
     );
@@ -73,10 +81,17 @@ class Dashboard extends Component {
     const {navigation} = this.props;
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
-        <Text>Home Screen</Text>
+        <Text>Шаблони</Text>
         <FlatList
           style={styles.listContainer}
           data={this.state.templates}
+          renderItem={renderItem}
+          keyExtractor={item => item.name}
+        />
+        <Text>Документи</Text>
+        <FlatList
+          style={styles.listContainer}
+          data={this.state.documents}
           renderItem={renderItem}
           keyExtractor={item => item.name}
         />
@@ -85,18 +100,18 @@ class Dashboard extends Component {
           onPress={() => navigation.navigate('StartUp')}>
           <Text>Go to StartUp</Text>
         </Button>
-        <Button
-          title="Go to SubmitPage"
-          onPress={() => navigation.navigate('SubmitPage')}>
-          <Text>Go to SubmitPage</Text>
-        </Button>
+        {/*<Button*/}
+        {/*  title="Go to SubmitPage"*/}
+        {/*  onPress={() => navigation.navigate('SubmitPage')}>*/}
+        {/*  <Text>Go to SubmitPage</Text>*/}
+        {/*</Button>*/}
         <Button onPress={() => navigation.navigate('TemplateCreation')}>
           <Text>TemplateCreation</Text>
         </Button>
-        <Button onPress={this.handleSendFile}>
-          <Text>Test</Text>
-        </Button>
-        <Text>{JSON.stringify(this.props.store)}</Text>
+        {/*<Button onPress={this.handleSendFile}>*/}
+        {/*  <Text>Test</Text>*/}
+        {/*</Button>*/}
+        {/*<Text>{JSON.stringify(this.props.store)}</Text>*/}
       </View>
     );
   }
