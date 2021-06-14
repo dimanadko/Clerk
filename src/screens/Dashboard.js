@@ -7,15 +7,12 @@ import RNShare from 'react-native-share';
 // import RNFetchBlob from 'rn-fetch-blob';
 import GetDocuments from '../services/GetDocuments';
 
-const TemplateListItem = ({title, onSubscribe, onDelete, path}) => {
+const TemplateListItem = ({title, onSubscribe, onDelete, path, isDoc}) => {
   return (
     <View style={styles.item}>
       <Text style={styles.itemText}>{title}</Text>
       <Button light onPress={() => onSubscribe(path)}>
-        <Text>Надіслати</Text>
-      </Button>
-      <Button light onPress={onDelete}>
-        <Text>Видалити</Text>
+        <Text style={styles.itemButton}>{isDoc ? 'Переглянути' : 'Заповнити'}</Text>
       </Button>
     </View>
   );
@@ -78,6 +75,14 @@ class Dashboard extends Component {
         onDelete={console.log}
       />
     );
+    const renderItemDoc = ({item}) => (
+      <TemplateListItem
+        title={item.name}
+        path={item.path}
+        onSubscribe={this.handleTemplateSubscribe}
+        isDoc={true}
+      />
+    );
     const {navigation} = this.props;
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
@@ -92,7 +97,7 @@ class Dashboard extends Component {
         <FlatList
           style={styles.listContainer}
           data={this.state.documents}
-          renderItem={renderItem}
+          renderItem={renderItemDoc}
           keyExtractor={item => item.name}
         />
         <Button
@@ -129,6 +134,9 @@ const styles = StyleSheet.create({
   },
   itemText: {
     width: '60%',
+  },
+  itemButton: {
+    padding: 5,
   },
   item: {
     flex: 1,

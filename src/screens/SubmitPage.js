@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import RNFS from 'react-native-fs';
-// import RNFetchBlob from 'react-native-fetch-blob'
+// import RNFetchBlob from 'react-native-fetch-blob';
 import {
   Container,
   Header,
@@ -45,11 +45,11 @@ class SubmitPage extends React.Component {
     this.setState(prevState => {
       const result = prevState.templateText
         .replace('|^~MyName~^|', this.props.name)
-        .replace('|^~Date~^|', moment().format('dd.mm.yyyy'));
+        .replace('|^~Date~^|', moment().format('DD.MM.YYYY'));
       return {templateText: result};
     });
   };
-  //
+
   // static sharePDFWithAndroid(fileUrl, type) {
   //   let filePath = null;
   //   let file_url_length = fileUrl.length;
@@ -90,9 +90,11 @@ class SubmitPage extends React.Component {
     return (
       <View>
         <Text>{this.state.templateText}</Text>
-        <Button light onPress={this.handleFillTemplate}>
-          <Text>Заповнити</Text>
-        </Button>
+        {this.state.templateText.includes('|^~') && (
+          <Button light onPress={this.handleFillTemplate}>
+            <Text>Заповнити</Text>
+          </Button>
+        )}
         <Button light onPress={this.handleSendFile}>
           <Text>Підписати</Text>
         </Button>
