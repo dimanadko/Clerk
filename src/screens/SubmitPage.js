@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import RNFS from 'react-native-fs';
+// import RNFetchBlob from 'react-native-fetch-blob'
 import {
   Container,
   Header,
@@ -48,6 +49,24 @@ class SubmitPage extends React.Component {
       return {templateText: result};
     });
   };
+  //
+  // static sharePDFWithAndroid(fileUrl, type) {
+  //   let filePath = null;
+  //   let file_url_length = fileUrl.length;
+  //   const configOptions = {fileCache: true};
+  //   RNFetchBlob.config(configOptions)
+  //     .fetch('GET', fileUrl)
+  //     .then(resp => {
+  //       filePath = resp.path();
+  //       return resp.readFile('base64');
+  //     })
+  //     .then(async base64Data => {
+  //       base64Data = `data:${type};base64,` + base64Data;
+  //       await Share.open({url: base64Data});
+  //       // remove the image or pdf from device's storage
+  //       await RNFS.unlink(filePath);
+  //     });
+  // }
 
   handleSendFile = () => {
     // const {fs, fetch, wrap} = RNFetchBlob;
@@ -59,11 +78,11 @@ class SubmitPage extends React.Component {
     RNShare.open(fileShareOption)
       .then(res => {
         console.log(res);
-        this.props.navigation.goBack();
+        this.props.navigation.push('Home');
       })
       .catch(err => {
         err && console.log(err);
-        this.props.navigation.goBack();
+        this.props.navigation.push('Home');
       });
   };
 

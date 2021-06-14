@@ -32,7 +32,7 @@ import GetTemplates from './src/services/GetTemplates';
 import {rootReducer} from './src/reducers';
 import {persistor, store} from './src/store/store';
 //readDir(dirpath: string)
-
+import os from 'react-native-os';
 const Stack = createStackNavigator();
 
 const path = RNFS.DocumentDirectoryPath + '/test1.txt';
@@ -41,6 +41,7 @@ const path = RNFS.DocumentDirectoryPath + '/test1.txt';
 
 const App: () => Node = () => {
   useEffect(() => {
+    console.log(os.platform());
     SaveFile({name: 'test', value: 'This is test value1'});
     SaveFile({name: 'test2', value: 'This is test value2'});
     // RNFS.readDir(RNFS.DocumentDirectoryPath)

@@ -22,7 +22,7 @@ class TemplateCreation extends React.Component {
   handleSave = async () => {
     console.log('State', this.state);
     await SaveFile({value: this.state.value});
-    this.props.navigation.goBack();
+    this.props.navigation.push('Home');
   };
   render() {
     return (
@@ -42,13 +42,6 @@ class TemplateCreation extends React.Component {
             this.handleTemplateDataAdd('MyName', true);
           }}>
           <Text>Мій ПІБ</Text>
-        </Button>
-        <Button
-          light
-          onPress={() => {
-            this.handleTemplateDataAdd('Name', true);
-          }}>
-          <Text>ПІБ контрагента</Text>
         </Button>
         <Button
           light

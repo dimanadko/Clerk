@@ -12,6 +12,8 @@ target 'Clerk' do
     :hermes_enabled => false
   )
 
+  pod 'RNOS', :path => '../node_modules/react-native-os'
+
   target 'ClerkTests' do
     inherit! :complete
     # Pods for testing

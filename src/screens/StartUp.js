@@ -94,20 +94,6 @@ class StartUp extends React.Component {
           </Item>
           <Text>Сертифікат</Text>
           <Text>{this.props.keyName || 'Необхідно додати'}</Text>
-          <Textarea
-            rowSpan={5}
-            bordered
-            placeholder="Публічний ключ"
-            value={this.state.privateKey}
-            onChangeText={this.handleFieldChange('privateKey')}
-          />
-          <Textarea
-            rowSpan={5}
-            bordered
-            placeholder="Приватний ключ"
-            value={this.state.publicKey}
-            onChangeText={this.handleFieldChange('publicKey')}
-          />
         </Form>
         <Button onPress={() => this.handleAddKey()} light>
           <Text>Додати ключі</Text>

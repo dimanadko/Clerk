@@ -10,7 +10,7 @@ import GetDocuments from '../services/GetDocuments';
 const TemplateListItem = ({title, onSubscribe, onDelete, path}) => {
   return (
     <View style={styles.item}>
-      <Text>{title}</Text>
+      <Text style={styles.itemText}>{title}</Text>
       <Button light onPress={() => onSubscribe(path)}>
         <Text>Надіслати</Text>
       </Button>
@@ -121,17 +121,20 @@ const styles = StyleSheet.create({
   listContainer: {
     height: 200,
     flex: 1,
-    backgroundColor: '#ff0000',
+    backgroundColor: '#b3e5fc',
   },
   container: {
     flex: 1,
     marginTop: 10,
   },
+  itemText: {
+    width: '60%',
+  },
   item: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#f9c2ff',
+    backgroundColor: '#2979ff',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
