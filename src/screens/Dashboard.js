@@ -1,27 +1,22 @@
 import React, {Component} from 'react';
 import {Text, View, FlatList, StyleSheet} from 'react-native';
-import {List, ListItem, Icon, Button} from 'native-base';
+import {List, ListItem, Icon, Button, H3} from 'native-base';
 import GetTemplates from '../services/GetTemplates';
 import {connect} from 'react-redux';
 import RNShare from 'react-native-share';
-// import RNFetchBlob from 'rn-fetch-blob';
 import GetDocuments from '../services/GetDocuments';
 
 const TemplateListItem = ({title, onSubscribe, onDelete, path, isDoc}) => {
   return (
     <View style={styles.item}>
       <Text style={styles.itemText}>{title}</Text>
-      <Button light onPress={() => onSubscribe(path)}>
-        <Text style={styles.itemButton}>{isDoc ? 'Переглянути' : 'Заповнити'}</Text>
+      <Button style={styles.itemButton} light onPress={() => onSubscribe(path)}>
+        <Text style={styles.itemButtonText}>
+          {isDoc ? 'Переглянути' : 'Заповнити'}
+        </Text>
       </Button>
     </View>
   );
-};
-
-const fileShareOption = {
-  type: 'application/octet-stream',
-  url:
-    'content://com.android.providers.downloads.documents/document/raw%3A%2Fstorage%2Femulated%2F0%2FDownload%2FhelloWorld.txt.p7s',
 };
 
 class Dashboard extends Component {
@@ -51,21 +46,6 @@ class Dashboard extends Component {
     this.props.navigation.navigate('SubmitPage', {templatePath: path});
   };
 
-  handleSendFile = () => {
-    // const {fs, fetch, wrap} = RNFetchBlob;
-    // RNFetchBlob.fs.readFile(fileShareOption.url, 'base64').then(base64Data => {
-    //   base64Data = `{fileShareOption.type};base64,` + base64Data;
-    //   RNShare.open({url: base64Data});
-    // });
-    RNShare.open(fileShareOption)
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        err && console.log(err);
-      });
-  };
-
   render() {
     const renderItem = ({item}) => (
       <TemplateListItem
@@ -85,34 +65,41 @@ class Dashboard extends Component {
     );
     const {navigation} = this.props;
     return (
-      <View style={{flex: 1, justifyContent: 'center'}}>
-        <Text>Шаблони</Text>
+      <View style={styles.mainContainer}>
+        <H3>Шаблони</H3>
         <FlatList
           style={styles.listContainer}
           data={this.state.templates}
           renderItem={renderItem}
           keyExtractor={item => item.name}
         />
-        <Text>Документи</Text>
+        <H3>Документи</H3>
         <FlatList
-          style={styles.listContainer}
+          style={styles.listContainer2}
           data={this.state.documents}
           renderItem={renderItemDoc}
           keyExtractor={item => item.name}
         />
-        <Button
-          title="Go to StartUp"
-          onPress={() => navigation.navigate('StartUp')}>
-          <Text>Go to StartUp</Text>
-        </Button>
-        {/*<Button*/}
-        {/*  title="Go to SubmitPage"*/}
-        {/*  onPress={() => navigation.navigate('SubmitPage')}>*/}
-        {/*  <Text>Go to SubmitPage</Text>*/}
-        {/*</Button>*/}
-        <Button onPress={() => navigation.navigate('TemplateCreation')}>
-          <Text>TemplateCreation</Text>
-        </Button>
+        <View style={styles.bottomBlock}>
+          <Button
+            light
+            style={styles.bottomBlockButton}
+            title="Go to StartUp"
+            onPress={() => navigation.navigate('StartUp')}>
+            <Text style={styles.itemButtonText}>Go to StartUp</Text>
+          </Button>
+          {/*<Button*/}
+          {/*  title="Go to SubmitPage"*/}
+          {/*  onPress={() => navigation.navigate('SubmitPage')}>*/}
+          {/*  <Text>Go to SubmitPage</Text>*/}
+          {/*</Button>*/}
+          <Button
+            light
+            style={styles.bottomBlockButton}
+            onPress={() => navigation.navigate('TemplateCreation')}>
+            <Text style={styles.itemButtonText}>TemplateCreation</Text>
+          </Button>
+        </View>
         {/*<Button onPress={this.handleSendFile}>*/}
         {/*  <Text>Test</Text>*/}
         {/*</Button>*/}
@@ -123,10 +110,21 @@ class Dashboard extends Component {
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    padding: 8,
+    flex: 1,
+    justifyContent: 'center',
+  },
   listContainer: {
     height: 200,
     flex: 1,
-    backgroundColor: '#b3e5fc',
+    // backgroundColor: '#B6C5CE',
+  },
+  listContainer2: {
+    height: 200,
+    flex: 1,
+    marginBottom: 40,
+    // backgroundColor: '#B6C5CE',
   },
   container: {
     flex: 1,
@@ -136,16 +134,36 @@ const styles = StyleSheet.create({
     width: '60%',
   },
   itemButton: {
-    padding: 5,
+    padding: 8,
+    backgroundColor: '#00A9A5',
+  },
+  itemButtonText: {
+    color: '#fff',
   },
   item: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#2979ff',
+    backgroundColor: '#B6C5CE',
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16,
+    // marginHorizontal: 16,
+  },
+  bottomBlock: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    flex: 1,
+    flexDirection: 'row',
+    // marginVertical: 8,
+    // marginHorizontal: 8,
+  },
+  bottomBlockButton: {
+    width: '50%',
+    marginRight: 10,
+    padding: 8,
+    backgroundColor: '#00A9A5',
   },
   title: {
     fontSize: 32,

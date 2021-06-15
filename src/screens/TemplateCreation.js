@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {Textarea, Form, Button} from 'native-base';
 import SaveFile from '../services/SaveFile';
 
@@ -26,9 +26,10 @@ class TemplateCreation extends React.Component {
   };
   render() {
     return (
-      <View>
+      <View style={styles.mainContainer}>
         <Form>
           <Textarea
+            style={styles.textAriaItem}
             value={this.state.value}
             onChangeText={this.handleTemplateChange}
             rowSpan={5}
@@ -38,25 +39,62 @@ class TemplateCreation extends React.Component {
         </Form>
         <Button
           light
+          style={styles.itemButton}
           onPress={() => {
             this.handleTemplateDataAdd('MyName', true);
           }}>
-          <Text>Мій ПІБ</Text>
+          <Text style={styles.itemButtonText}>Мій ПІБ</Text>
         </Button>
         <Button
           light
+          style={styles.itemButton}
           onPress={() => {
             this.handleTemplateDataAdd('Date', true);
           }}>
-          <Text>Дата</Text>
+          <Text style={styles.itemButtonText}>Дата</Text>
         </Button>
-        <Button light onPress={this.handleSave}>
-          <Text>Зберегти</Text>
+        <Button style={styles.itemButton} light onPress={this.handleSave}>
+          <Text style={styles.itemButtonText}>Зберегти</Text>
         </Button>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    padding: 8,
+  },
+  textblock: {
+    marginVertical: 8,
+    marginHorizontal: 8,
+    marginLeft: 15,
+  },
+  textAriaItem: {
+    // margin: 8,
+  },
+  buttonsBlock: {
+    flex: 1,
+    flexDirection: 'column',
+    height: 200,
+  },
+  item: {
+    flex: 1,
+    flexDirection: 'row',
+    marginVertical: 8,
+    marginHorizontal: 8,
+  },
+  itemButton: {
+    backgroundColor: '#00A9A5',
+    color: '#fff',
+    marginTop: 8,
+    padding: 8,
+    width: 80,
+  },
+  itemButtonText: {
+    color: '#fff',
+  },
+});
 
 // ...
 

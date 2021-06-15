@@ -17,6 +17,7 @@ const SaveFile = async ({
     RNFS.writeFile(path, value, 'utf8')
       .then(success => {
         console.log('FILE WRITTEN!', success);
+        return value;
       })
       .catch(err => {
         console.log(err.message);
@@ -27,6 +28,7 @@ const SaveFile = async ({
     RNFS.writeFile(path, value, 'utf8')
       .then(success => {
         console.log('FILE WRITTEN!', success);
+        return value;
       })
       .catch(err => {
         console.log(err.message);

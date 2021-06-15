@@ -42,8 +42,8 @@ const path = RNFS.DocumentDirectoryPath + '/test1.txt';
 const App: () => Node = () => {
   useEffect(() => {
     console.log(os.platform());
-    SaveFile({name: 'test', value: 'This is test value1'});
-    SaveFile({name: 'test2', value: 'This is test value2'});
+    // SaveFile({name: 'test', value: 'This is test value1'});
+    // SaveFile({name: 'test2', value: 'This is test value2'});
     // RNFS.readDir(RNFS.DocumentDirectoryPath)
     //   .then(result => {
     //     console.log('GOT RESULT', result);

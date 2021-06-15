@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {
   Container,
   Header,
@@ -10,6 +10,8 @@ import {
   Input,
   Label,
   Button,
+  H3,
+  Text
 } from 'native-base';
 import {connect} from 'react-redux';
 import DocumentPicker from 'react-native-document-picker';
@@ -45,6 +47,7 @@ class StartUp extends React.Component {
         res.name,
         res.size,
       );
+      // this.props.onAddKey();
       this.props.onAddKey({keyAddress: res.uri, keyName: res.name});
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -92,21 +95,52 @@ class StartUp extends React.Component {
               onChangeText={this.handleFieldChange('patronymic')}
             />
           </Item>
-          <Text>Сертифікат</Text>
-          <Text>{this.props.keyName || 'Необхідно додати'}</Text>
+          <View style={styles.textblock}>
+            <H3>Сертифікат</H3>
+            <Text>{this.props.keyName || 'Необхідно додати'}</Text>
+          </View>
         </Form>
-        <Button onPress={() => this.handleAddKey()} light>
-          <Text>Додати ключі</Text>
-        </Button>
-        <Button onPress={() => this.props.onSave(this.state)} light>
-          <Text>Зберегти</Text>
-        </Button>
+        <View style={styles.item}>
+          <Button
+            style={styles.itemButton}
+            onPress={() => this.handleAddKey()}
+            light>
+            <Text style={styles.itemButtonText}>Додати ключ</Text>
+          </Button>
+          <Button
+            style={styles.itemButton}
+            onPress={() => this.props.onSave(this.state)}
+            light>
+            <Text style={styles.itemButtonText}>Зберегти</Text>
+          </Button>
+        </View>
       </View>
     );
   }
 }
 
-// ...
+const styles = StyleSheet.create({
+  textblock: {
+    marginVertical: 8,
+    marginHorizontal: 8,
+    marginLeft: 15,
+  },
+  item: {
+    flex: 1,
+    flexDirection: 'row',
+    marginVertical: 8,
+    marginHorizontal: 8,
+  },
+  itemButton: {
+    backgroundColor: '#00A9A5',
+    color: '#fff',
+    marginLeft: 8,
+    padding: 8,
+  },
+  itemButtonText: {
+    color: '#fff',
+  },
+});
 
 const mapStateToProps = ({data}) => ({
   name: data.name,
@@ -132,15 +166,27 @@ const mapDispatchToProps = dispatch => {
         },
       });
     },
-    onAddKey: ({keyName, keyAddress}) => {
-      dispatch({
-        type: 'UPDATE_ALL_DATA',
-        value: {
-          keyName: keyName,
-          keyAddress: keyAddress,
-        },
-      });
+    onAddKey: data => {
+      if (data) {
+        const {keyName, keyAddress} = data;
+        dispatch({
+          type: 'UPDATE_ALL_DATA',
+          value: {
+            keyName: keyName,
+            keyAddress: keyAddress,
+          },
+        });
+      } else {
+        dispatch({
+          type: 'UPDATE_ALL_DATA',
+          value: {
+            keyName: undefined,
+            keyAddress: undefined,
+          },
+        });
+      }
     },
   };
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(StartUp);
